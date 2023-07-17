@@ -19,16 +19,28 @@ pipeline {
         sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
       }
     }
-    /*stage('Static Code Analysis') {
+    stage('Static Code Analysis') {
       environment {
         SONAR_URL = "http://203.33.207.10:9000"
       }
       steps {
         withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
           sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+        // Retrieve SonarQube analysis status
+            script {
+                def sonarqubeApiUrl = "http://203.33.207.10:9000/api/qualitygates/project_status?projectKey=com.abhishek:spring-boot-demo"
+                def sonarqubeResponse = sh(script: "curl -s $sonarqubeApiUrl", returnStdout: true)
+                def sonarqubeStatus = readJSON(text: sonarqubeResponse).projectStatus.status
+
+                if (sonarqubeStatus == 'OK') {
+                    echo "SonarQube analysis passed!"
+                } else {
+                    error "SonarQube analysis failed!"
+                }
+            }
         }
       }
-    }*/
+    }
     stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "rockuk/ultimate-cicd:${BUILD_NUMBER}"
