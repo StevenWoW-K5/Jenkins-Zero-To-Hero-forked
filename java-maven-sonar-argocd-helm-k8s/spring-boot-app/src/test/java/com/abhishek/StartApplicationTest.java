@@ -21,7 +21,7 @@ class StartApplicationTest {
         String result = startApplication.index(model);
 
         // 验证 model 的属性是否正确设置
-        Mockito.verify(model).addAttribute("title", "I have successfuly built a sprint boot application using Maven-666hhh11123664ttt");
+        Mockito.verify(model).addAttribute("title", "I have successfuly built a sprint boot application using Maven999111-666hhh11123664tttSEP");
         Mockito.verify(model).addAttribute("msg", "This application is deployed on to Kubernetes using Argo CD");
 
         // 验证 index 方法的返回值是否符合预期
