@@ -26,7 +26,7 @@ class StartApplicationTest {
 
         // 验证 index 方法的返回值是否符合预期
         assertEquals("index", result);
-        assertEquals(8,8);
+        assertEquals(9,9);
     }
 
     @Test
